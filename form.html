@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        .error {color: #FF0000;}
+    </style>
+    <script type="text/javascript">
+        $(function (){
+            $("#btn").click(function(){
+
+                var name = $("#name").val();
+                var email = $("#email").val();
+                var comment = $("#comment").val();
+                var female = $("#female").val();
+                var male = $("#male").val();
+                if(isNaN(name) || $.trim(name) == "" )
+                {
+                    alert('姓名是必填的');
+                    $("#name").focus();
+                    return false;
+                }
+                if(isNaN(email) || $.trim(email) == "" )
+                {
+                    alert('电邮是必填的');
+                    $("#email").focus();
+                    return false;
+                }
+                $.post('test.php',
+                        {'name':name,'email':email},
+                        function(r){
+                            alert(r.msg);
+                            if (r.error == 0)
+                            {
+                                location.href='auto_assign_new.php';
+                            }
+                        }, "json");
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>PHP 验证实例</h2>
+    <p><span class="error">* 必需的字段</span></p>
+    <form method="post" action="test.php">
+        姓名：<input type="text" id="name" name="name">
+        <span class="error">* <?php echo $nameErr;?></span>
+        <br><br>
+        电邮：<input type="text" id="email" name="email">
+        <span class="error">* <?php echo $emailErr;?></span>
+        <br><br>
+        网址：<input type="text" id="website" name="website">
+        <span class="error"><?php echo $websiteErr;?></span>
+        <br><br>
+        评论：<textarea name="comment" id="comment" rows="5" cols="40"></textarea>
+        <br><br>
+        性别：
+        <input type="radio" name="gender" id="female" value="female">女性
+        <input type="radio" name="gender" id="male" value="male">男性
+        <span class="error">* <?php echo $genderErr;?></span>
+        <br><br>
+        <input type="submit" id="btn" name="submit" value="提交">
+    </form>
+</body>
+</html>
